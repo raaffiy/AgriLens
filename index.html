@@ -85,11 +85,17 @@
         </div>
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
-          <input type="password" placeholder="Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+          <input type="password" id="registerPassword" placeholder="Password" class="w-full p-3 pl-10 pr-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+          <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('registerPassword', 'toggleRegisterPassword')">
+            <i id="toggleRegisterPassword" class="fas fa-eye-slash text-gray-400"></i>
+          </span>
         </div>
         <div class="relative">
            <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
-           <input type="password" placeholder="Konfirmasi Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+           <input type="password" id="registerConfirmPassword" placeholder="Konfirmasi Password" class="w-full p-3 pl-10 pr-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+           <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('registerConfirmPassword', 'toggleRegisterConfirmPassword')">
+             <i id="toggleRegisterConfirmPassword" class="fas fa-eye-slash text-gray-400"></i>
+           </span>
         </div>
 
         <button type="button" onclick="alert('Register clicked')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
@@ -155,6 +161,21 @@
 
     // Default to showing the login page
     showPage('loginPage');
+
+    function togglePasswordVisibility(inputId, iconId) {
+      const passwordInput = document.getElementById(inputId);
+      const toggleIcon = document.getElementById(iconId);
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+      }
+    }
   </script>
 </body>
 </html>
