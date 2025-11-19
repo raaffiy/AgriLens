@@ -1,8 +1,4 @@
-<h1>Fiture Pada Project AgriLens</h1>
-
-1. Untuk user Masyarakat
-2. Untuk user Petani
-3. Untuk user Rt/Rw
+<h1>AgriLens</h1>
 
 =====================================
 =====================================
