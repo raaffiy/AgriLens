@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriLens - Autentikasi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background: url('assets/bg.png') no-repeat center center/cover;
+      font-family: 'Poppins', sans-serif;
+    }
+    .bg-glass {
+      background: rgba(25, 25, 25, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .form-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .form-input:focus {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: #34D399; /* Green-400 */
+    }
+    ::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex items-center justify-center p-4"> 
+
+  <main class="w-full max-w-md">
+    <!-- LOGIN PAGE -->
+    <section id="loginPage" class="bg-glass p-8 rounded-2xl shadow-2xl transition-all duration-500">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white">Selamat Datang!</h1>
+        <p class="text-green-300">Masuk untuk melanjutkan ke AgriLens</p>
+      </div>
+
+      <form class="space-y-6">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <i class="fas fa-envelope text-gray-400"></i>
+          </span>
+          <input type="email" placeholder="Email" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+            <i class="fas fa-lock text-gray-400"></i>
+          </span>
+          <input type="password" placeholder="Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+
+        <button type="button" onclick="alert('Login clicked')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+          Login
+        </button>
+
+        <p class="text-white text-center text-sm pt-4">
+          Lupa password? <span onclick="showPage('forgotPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Reset di sini</span>
+        </p>
+        <p class="text-white text-center text-sm">
+          Belum punya akun? <span onclick="showPage('registerPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Daftar sekarang</span>
+        </p>
+      </form>
+    </section>
+
+    <!-- REGISTER PAGE -->
+    <section id="registerPage" class="bg-glass p-8 rounded-2xl shadow-2xl hidden transition-all duration-500">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white">Buat Akun Baru</h1>
+        <p class="text-green-300">Gabung bersama AgriLens</p>
+      </div>
+
+      <form class="space-y-5">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-user text-gray-400"></i></span>
+          <input type="text" placeholder="Nama Lengkap" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-envelope text-gray-400"></i></span>
+          <input type="email" placeholder="Email" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
+          <input type="password" placeholder="Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+        <div class="relative">
+           <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
+           <input type="password" placeholder="Konfirmasi Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+
+        <button type="button" onclick="alert('Register clicked')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+          Register
+        </button>
+
+        <p class="text-white text-center text-sm pt-4">
+          Sudah punya akun? <span onclick="showPage('loginPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Login</span>
+        </p>
+      </form>
+    </section>
+
+    <!-- FORGOT PASSWORD PAGE -->
+    <section id="forgotPage" class="bg-glass p-8 rounded-2xl shadow-2xl hidden transition-all duration-500">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white">Lupa Password</h1>
+        <p class="text-green-300">Kami akan bantu reset password Anda</p>
+      </div>
+
+      <form class="space-y-6">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-envelope text-gray-400"></i></span>
+          <input type="email" placeholder="Masukkan email terdaftar" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
+        </div>
+
+        <button type="button" onclick="alert('Reset link sent')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+          Kirim Link Reset
+        </button>
+
+        <p class="text-white text-center text-sm pt-4">
+          Ingat password? <span onclick="showPage('loginPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Kembali ke Login</span>
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const pages = ['loginPage', 'registerPage', 'forgotPage'];
+
+    function showPage(pageId) {
+      const targetPage = document.getElementById(pageId);
+
+      pages.forEach(id => {
+        const page = document.getElementById(id);
+        if (id === pageId) {
+          page.classList.remove('hidden');
+          page.style.animation = 'fadeIn 0.5s ease-in-out';
+        } else {
+          page.classList.add('hidden');
+        }
+      });
+    }
+
+    // Keyframe animation for fade-in effect
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Default to showing the login page
+    showPage('loginPage');
+  </script>
+</body>
+</html>
