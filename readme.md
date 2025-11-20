@@ -63,3 +63,6 @@
     1. Input harga dan ketersediaan hasil panen dari petani.
     2. Integrasi dengan marketplace lokal/dinas perdagangan.
     3. Notifikasi ke warga saat ada panen atau promo produk lokal.
+
+
+    testtttt
