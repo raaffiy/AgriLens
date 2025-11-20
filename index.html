@@ -1,181 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriLens - Autentikasi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    body {
-      background: url('assets/bg.png') no-repeat center center/cover;
-      font-family: 'Poppins', sans-serif;
-    }
-    .bg-glass {
-      background: rgba(25, 25, 25, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .form-input {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .form-input:focus {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #34D399; /* Green-400 */
-    }
-    ::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
-<body class="min-h-screen flex items-center justify-center p-4"> 
-
-  <main class="w-full max-w-md">
-    <!-- LOGIN PAGE -->
-    <section id="loginPage" class="bg-glass p-8 rounded-2xl shadow-2xl transition-all duration-500">
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-white">Selamat Datang!</h1>
-        <p class="text-green-300">Masuk untuk melanjutkan ke AgriLens</p>
-      </div>
-
-      <form class="space-y-6">
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <i class="fas fa-envelope text-gray-400"></i>
-          </span>
-          <input type="email" placeholder="Email" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-        </div>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <i class="fas fa-lock text-gray-400"></i>
-          </span>
-          <input type="password" placeholder="Password" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-        </div>
-
-        <button type="button" onclick="alert('Login clicked')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
-          Login
-        </button>
-
-        <p class="text-white text-center text-sm pt-4">
-          Lupa password? <span onclick="showPage('forgotPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Reset di sini</span>
-        </p>
-        <p class="text-white text-center text-sm">
-          Belum punya akun? <span onclick="showPage('registerPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Daftar sekarang</span>
-        </p>
-      </form>
-    </section>
-
-    <!-- REGISTER PAGE -->
-    <section id="registerPage" class="bg-glass p-8 rounded-2xl shadow-2xl hidden transition-all duration-500">
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-white">Buat Akun Baru</h1>
-        <p class="text-green-300">Gabung bersama AgriLens</p>
-      </div>
-
-      <form class="space-y-5">
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-user text-gray-400"></i></span>
-          <input type="text" placeholder="Nama Lengkap" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-        </div>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-envelope text-gray-400"></i></span>
-          <input type="email" placeholder="Email" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-        </div>
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
-          <input type="password" id="registerPassword" placeholder="Password" class="w-full p-3 pl-10 pr-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-          <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('registerPassword', 'toggleRegisterPassword')">
-            <i id="toggleRegisterPassword" class="fas fa-eye-slash text-gray-400"></i>
-          </span>
-        </div>
-        <div class="relative">
-           <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-lock text-gray-400"></i></span>
-           <input type="password" id="registerConfirmPassword" placeholder="Konfirmasi Password" class="w-full p-3 pl-10 pr-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-           <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('registerConfirmPassword', 'toggleRegisterConfirmPassword')">
-             <i id="toggleRegisterConfirmPassword" class="fas fa-eye-slash text-gray-400"></i>
-           </span>
-        </div>
-
-        <button type="button" onclick="alert('Register clicked')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
-          Register
-        </button>
-
-        <p class="text-white text-center text-sm pt-4">
-          Sudah punya akun? <span onclick="showPage('loginPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Login</span>
-        </p>
-      </form>
-    </section>
-
-    <!-- FORGOT PASSWORD PAGE -->
-    <section id="forgotPage" class="bg-glass p-8 rounded-2xl shadow-2xl hidden transition-all duration-500">
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-white">Lupa Password</h1>
-        <p class="text-green-300">Kami akan bantu reset password Anda</p>
-      </div>
-
-      <form class="space-y-6">
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fas fa-envelope text-gray-400"></i></span>
-          <input type="email" placeholder="Masukkan email terdaftar" class="w-full p-3 pl-10 rounded-lg text-white form-input focus:outline-none focus:ring-2 focus:ring-green-400" />
-        </div>
-
-        <button type="button" onclick="alert('Reset link sent')" class="w-full bg-green-600 text-white font-semibold p-3 rounded-lg hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
-          Kirim Link Reset
-        </button>
-
-        <p class="text-white text-center text-sm pt-4">
-          Ingat password? <span onclick="showPage('loginPage')" class="text-green-300 hover:text-green-400 cursor-pointer font-semibold">Kembali ke Login</span>
-        </p>
-      </form>
-    </section>
-  </main>
-
-  <script>
-    const pages = ['loginPage', 'registerPage', 'forgotPage'];
-
-    function showPage(pageId) {
-      const targetPage = document.getElementById(pageId);
-
-      pages.forEach(id => {
-        const page = document.getElementById(id);
-        if (id === pageId) {
-          page.classList.remove('hidden');
-          page.style.animation = 'fadeIn 0.5s ease-in-out';
-        } else {
-          page.classList.add('hidden');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgriLens - Smart Agriculture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('assets/bg.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
         }
-      });
-    }
+        .backdrop-blur-xl {
+            backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200">
 
-    // Keyframe animation for fade-in effect
-    const style = document.createElement('style');
-    style.innerHTML = `
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-    `;
-    document.head.appendChild(style);
+    <!-- Header / Navbar -->
+    <header class="bg-black/30 backdrop-blur-xl sticky top-0 z-50 shadow-lg">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-white">
+                🌿 <span class="text-green-400">Agri</span>Lens
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Module Edukasi</a>
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Library Digital</a>
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Quiz & Tantangan</a>
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Forum</a>
+            </div>
+            <a href="login_register_forgot.html" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                Login
+            </a>
+        </nav>
+    </header>
 
-    // Default to showing the login page
-    showPage('loginPage');
+    <!-- Hero Section -->
+    <main class="container mx-auto px-6 py-20 md:py-32 text-center">
+        <div class="bg-black/40 backdrop-blur-xl p-10 rounded-3xl">
+            <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight">
+                Masa Depan Pertanian Dimulai di Sini
+            </h1>
+            <p class="mt-6 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                Menggabungkan Teknologi Cerdas dan Kearifan Lokal untuk Komunitas Pertanian yang Mandiri dan Berkelanjutan.
+            </p>
+            <div class="mt-10">
+                <a href="#latar-belakang" class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 text-lg">
+                    Pelajari Lebih Lanjut
+                </a>
+            </div>
+        </div>
+    </main>
 
-    function togglePasswordVisibility(inputId, iconId) {
-      const passwordInput = document.getElementById(inputId);
-      const toggleIcon = document.getElementById(iconId);
+    <!-- Content Sections -->
+    <div class="py-20 bg-black/20">
+        <div class="container mx-auto px-6 space-y-20">
 
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.remove('fa-eye-slash');
-        toggleIcon.classList.add('fa-eye');
-      } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.remove('fa-eye');
-        toggleIcon.classList.add('fa-eye-slash');
-      }
-    }
-  </script>
+            <!-- Latar Belakang -->
+            <section id="latar-belakang" class="flex flex-col md:flex-row items-center gap-10">
+                <div class="w-full md:w-1/2 bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-2xl">
+                    <h2 class="text-3xl font-bold text-white mb-4">
+                        <span class="text-green-400">Latar Belakang</span> AgriLens
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed">
+                        AgriLens lahir dari kebutuhan masyarakat dan petani untuk memiliki akses terhadap teknologi pertanian modern yang dapat membantu meningkatkan kualitas produksi, efisiensi kerja, serta memberikan edukasi pertanian yang mudah dipahami. Minimnya pemahaman masyarakat terhadap lingkungan dan pertanian berkelanjutan juga menjadi alasan utama dibuatnya platform ini. Dengan menggabungkan teknologi digital, edukasi, dan pemberdayaan komunitas, AgriLens hadir sebagai solusi untuk menciptakan sistem pertanian yang lebih cerdas dan ramah lingkungan.
+                    </p>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <img src="assets/latarbelakang.png" alt="Smart Farming" class="rounded-2xl shadow-2xl object-cover h-full w-full">
+                </div>
+            </section>
+
+            <!-- Tujuan -->
+            <section id="tujuan" class="text-center">
+                <h2 class="text-4xl font-bold text-white mb-12">
+                    Tujuan <span class="text-green-400">Kami</span>
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500">
+                        <h3 class="text-2xl font-semibold text-green-400 mb-3">Literasi Pertanian</h3>
+                        <p class="text-gray-300">Meningkatkan literasi pertanian bagi masyarakat umum melalui modul interaktif dan gamifikasi.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500">
+                        <h3 class="text-2xl font-semibold text-green-400 mb-3">Monitoring Cerdas</h3>
+                        <p class="text-gray-300">Membantu petani memonitor kondisi tanah dan tanaman menggunakan teknologi digital secara real-time.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500">
+                        <h3 class="text-2xl font-semibold text-green-400 mb-3">Ekosistem Kolaboratif</h3>
+                        <p class="text-gray-300">Membangun forum komunikasi antara masyarakat, petani, dan pihak terkait untuk ekosistem yang solid.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manfaat -->
+            <section id="manfaat" class="text-center">
+                <h2 class="text-4xl font-bold text-white mb-12">
+                    Manfaat <span class="text-green-400">AgriLens</span>
+                </h2>
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+                    <!-- Benefit 1 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500 flex items-start space-x-4">
+                        <div class="text-green-400 flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.205 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.795 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.795 5 16.5 5c1.705 0 3.332.477 4.5 1.253v13C19.832 18.477 18.205 18 16.5 18c-1.705 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-semibold text-xl text-white mb-2">Edukasi Modern</h4>
+                            <p class="text-gray-300">Menyediakan materi edukasi pertanian yang mudah diakses dan dipahami oleh semua kalangan, dari pemula hingga ahli.</p>
+                        </div>
+                    </div>
+                    <!-- Benefit 2 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500 flex items-start space-x-4">
+                        <div class="text-green-400 flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-semibold text-xl text-white mb-2">Analisis Data Akurat</h4>
+                            <p class="text-gray-300">Mempermudah petani dalam melakukan analisis tanah, jadwal tanam, dan pencatatan hasil panen berbasis data yang akurat.</p>
+                        </div>
+                    </div>
+                    <!-- Benefit 3 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500 flex items-start space-x-4">
+                        <div class="text-green-400 flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-semibold text-xl text-white mb-2">Pusat Informasi Komunitas</h4>
+                            <p class="text-gray-300">Menjadi hub informasi pertanian terpusat di tingkat RT/RW, memfasilitasi pertukaran pengetahuan dan pengalaman.</p>
+                        </div>
+                    </div>
+                    <!-- Benefit 4 -->
+                    <div class="bg-black/30 backdrop-blur-xl p-8 rounded-2xl shadow-xl transform hover:-translate-y-2 transition duration-500 flex items-start space-x-4">
+                        <div class="text-green-400 flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h4 class="font-semibold text-xl text-white mb-2">Peningkatan Produktivitas</h4>
+                            <p class="text-gray-300">Meningkatkan hasil panen dan efisiensi pertanian melalui penerapan teknologi dan data yang tepat dan terarah.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Galeri Dokumentasi -->
+    <section id="galeri" class="text-center mt-20">
+        <h2 class="text-4xl font-bold text-white mb-12">
+            Galeri <span class="text-green-400">Dokumentasi</span>
+        </h2>
+    
+        <div class="max-w-7xl mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6">
+    
+            <!-- Item Galeri 1 -->
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl bg-black/30 backdrop-blur-xl">
+                <img src="assets/gallery1.jpg" alt="Galeri 1"
+                    class="w-full h-56 object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
+                    <p class="text-white text-lg font-semibold">Kegiatan Penyuluhan</p>
+                </div>
+            </div>
+    
+            <!-- Item Galeri 2 -->
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl bg-black/30 backdrop-blur-xl">
+                <img src="assets/gallery2.jpg" alt="Galeri 2"
+                    class="w-full h-56 object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
+                    <p class="text-white text-lg font-semibold">Lahan Pertanian</p>
+                </div>
+            </div>
+    
+            <!-- Item Galeri 3 -->
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl bg-black/30 backdrop-blur-xl">
+                <img src="assets/gallery3.jpg" alt="Galeri 3"
+                    class="w-full h-56 object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
+                    <p class="text-white text-lg font-semibold">Pemantauan Tanaman</p>
+                </div>
+            </div>
+    
+            <!-- Item Galeri 4 -->
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl bg-black/30 backdrop-blur-xl">
+                <img src="assets/gallery4.jpg" alt="Galeri 4"
+                    class="w-full h-56 object-cover transition duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center">
+                    <p class="text-white text-lg font-semibold">Kegiatan Masyarakat</p>
+                </div>
+            </div>
+    
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <p class="text-lg font-semibold text-white">🌿 <span class="text-green-400">Agri</span>Lens</p>
+            <p class="mt-2">Smart Agriculture for a Better Future</p>
+            <p class="text-sm mt-4 opacity-70">&copy; 2025 AgriLens Project. All Rights Reserved.</p>
+        </div>
+    </footer>
+
 </body>
 </html>
