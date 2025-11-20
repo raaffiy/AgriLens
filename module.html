@@ -28,23 +28,51 @@
     <!-- Navbar -->
     <header class="bg-black/30 backdrop-blur-xl sticky top-0 z-50 shadow-lg">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+    
+            <!-- Logo -->
             <a href="index.html" class="text-3xl font-bold text-white">
                 🌿 <span class="text-green-400">Agri</span>Lens
             </a>
-
+    
+            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
-                <a href="module.html" class="text-green-400 font-semibold">Module Edukasi</a>
+                <a href="module.html" class="text-gray-300 hover:text-green-400 transition duration-300">Module Edukasi</a>
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Library Digital</a>
+                <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Quiz & Tantangan</a>
+                <a href="forum.html" class="text-gray-300 hover:text-green-400 transition duration-300">Forum</a>
+            </div>
+    
+            <!-- Login (Desktop) -->
+            <a href="LoginRegisterForgot.html"
+                class="hidden md:block bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                Login
+            </a>
+    
+            <!-- Mobile Hamburger Button -->
+            <button id="menu-btn" class="md:hidden text-white text-3xl focus:outline-none">
+                ☰
+            </button>
+        </nav>
+    
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden backdrop-blur-xl md:hidden">
+            <div class="flex flex-col px-6 py-4 space-y-4">
+    
+                <a href="module.html" class="text-gray-300 hover:text-green-400 transition duration-300">Module Edukasi</a>
                 <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Library Digital</a>
                 <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Quiz & Tantangan</a>
                 <a href="#" class="text-gray-300 hover:text-green-400 transition duration-300">Forum</a>
+    
+                <a href="LoginRegisterForgot.html"
+                    class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 text-center rounded-full transition duration-300">
+                    Login
+                </a>
             </div>
-
-            <a href="LoginRegisterForgot.html"
-                class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-full transition duration-300 transform hover:scale-105">
-                Login
-            </a>
-        </nav>
+        </div>
     </header>
+    
+    <script>
+    </script>
 
     <!-- Hero -->
     <section class="container mx-auto px-6 py-16 text-center">
@@ -304,81 +332,81 @@
         };
 
         function openPopup(type) {
-                const data = popupData[type];
-                const modal = document.getElementById('popup-modal');
-                const container = document.getElementById('popup-container');
-                const contentEl = document.getElementById('popup-content');
+            const data = popupData[type];
+            const modal = document.getElementById('popup-modal');
+            const container = document.getElementById('popup-container');
+            const contentEl = document.getElementById('popup-content');
 
-                if (data) {
-                    // set title + content (iframe akan dimasukkan kembali saat open)
-                    document.getElementById('popup-title').innerText = data.title;
-                    contentEl.innerHTML = data.content;
-
-                    // show modal
-                    modal.classList.remove('hidden');
-
-                    // allow animation frame then animate in
-                    setTimeout(() => {
-                        container.classList.remove('scale-95', 'opacity-0');
-                        container.classList.add('scale-100', 'opacity-100');
-                    }, 50);
-
-                    // fokus agar Esc bisa ditangkap
-                    container.focus?.();
-                }
-            }
-
-            function closePopup() {
-                const modal = document.getElementById('popup-modal');
-                const container = document.getElementById('popup-container');
-                const contentEl = document.getElementById('popup-content');
-
-                // 1) Hentikan semua iframe YouTube / media segera agar tidak berjalan di background
-                const iframes = contentEl.querySelectorAll('iframe');
-                iframes.forEach(iframe => {
-                    // simpan src bila perlu (opsional):
-                    // iframe.dataset.src = iframe.src;
-                    // kosongkan src untuk menghentikan pemutaran
-                    try {
-                        iframe.src = '';
-                    } catch (e) {
-                        // fallback: hapus elemen
-                        iframe.remove();
-                    }
-                });
-
-                // alternatif lebih drastis: kosongkan seluruh konten popup
-                // contentEl.innerHTML = '';
-
-                // 2) animasi keluar
-                container.classList.add('scale-95', 'opacity-0');
-                container.classList.remove('scale-100', 'opacity-100');
-
-                // 3) setelah animasi selesai, sembunyikan modal
+            if (data) {
+                // set title + content (iframe akan dimasukkan kembali saat open)
+                document.getElementById('popup-title').innerText = data.title;
+                contentEl.innerHTML = data.content;
+                
+                // show modal
+                modal.classList.remove('hidden');
+                
+                // allow animation frame then animate in
                 setTimeout(() => {
-                    modal.classList.add('hidden');
+                    container.classList.remove('scale-95', 'opacity-0');
+                    container.classList.add('scale-100', 'opacity-100');
+                }, 50);
 
-                    // opsional: kosongkan konten setelah ditutup agar siap saat dibuka lagi
-                    // (bisa juga dibiarkan, karena openPopup akan menimpa innerHTML)
-                    // contentEl.innerHTML = '';
-
-                }, 300);
+                // fokus agar Esc bisa ditangkap
+                container.focus?.();
             }
+        }
 
-            /* --- tambahan opsional: tutup saat klik di area luar container --- */
-            document.getElementById('popup-modal').addEventListener('click', function (e) {
-                // jika klik tepat di background (bukan di container), tutup
-                if (e.target.id === 'popup-modal') closePopup();
-            });
-
-            /* --- tambahan opsional: tutup saat tekan Escape --- */
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    const modal = document.getElementById('popup-modal');
-                    if (!modal.classList.contains('hidden')) closePopup();
+        function closePopup() {
+            const modal = document.getElementById('popup-modal');
+            const container = document.getElementById('popup-container');
+            const contentEl = document.getElementById('popup-content');
+            // 1) Hentikan semua iframe YouTube / media segera agar tidak berjalan di background
+            const iframes = contentEl.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                // simpan src bila perlu (opsional):
+                // iframe.dataset.src = iframe.src;
+                // kosongkan src untuk menghentikan pemutaran
+                try {
+                    iframe.src = '';
+                } catch (e) {
+                    // fallback: hapus elemen
+                    iframe.remove();
                 }
             });
+            // alternatif lebih drastis: kosongkan seluruh konten popup
+            // contentEl.innerHTML = '';
+            // 2) animasi keluar
+            container.classList.add('scale-95', 'opacity-0');
+            container.classList.remove('scale-100', 'opacity-100');
+            // 3) setelah animasi selesai, sembunyikan modal
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // opsional: kosongkan konten setelah ditutup agar siap saat dibuka lagi
+                // (bisa juga dibiarkan, karena openPopup akan menimpa innerHTML)
+                // contentEl.innerHTML = '';
+            }, 300);
+        }
+        
+        /* --- tambahan opsional: tutup saat klik di area luar container --- */
+        document.getElementById('popup-modal').addEventListener('click', function (e) {
+            // jika klik tepat di background (bukan di container), tutup
+            if (e.target.id === 'popup-modal') closePopup();
+        });
+        
+        /* --- tambahan opsional: tutup saat tekan Escape --- */
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('popup-modal');
+                if (!modal.classList.contains('hidden')) closePopup();
+            }
+        });
+        
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     </script>
 
     <!-- Footer -->
