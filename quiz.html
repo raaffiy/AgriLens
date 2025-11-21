@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgriLens - Quiz & Tantangan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background-image: url('assets/bg.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .fade-in {
+            animation: fadeIn .5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-100">
+
+    <!-- Navbar -->
+    <header class="bg-black/40 backdrop-blur-lg sticky top-0 z-50 shadow-lg">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-bold text-white">🌿 <span
+                    class="text-green-400">Agri</span>Lens</a>
+            <a href="LoginRegisterForgot.html"
+                class="hidden md:block bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                Dashboard
+            </a>
+        </nav>
+    </header>
+
+    <!-- MAIN GAME SECTION -->
+    <main class="container mx-auto px-6 py-16">
+
+        <!-- Title -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold">
+                🎮 Quiz & Tantangan <span class="text-green-400">AgriLens</span>
+            </h1>
+            <p class="text-gray-300 mt-3">Uji pengetahuanmu seputar pertanian dan menangkan poin!</p>
+        </div>
+
+        <!-- Game Box -->
+        <div id="game-container"
+            class="max-w-3xl mx-auto bg-black/60 border border-green-500 backdrop-blur-lg p-10 rounded-3xl shadow-xl fade-in">
+
+            <!-- Start Screen -->
+            <div id="start-screen">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 text-green-300">Siap Bermain?</h2>
+                <p class="text-lg text-gray-200 text-center mb-8">
+                    Jawab pertanyaan sebanyak mungkin. Setiap jawaban benar menambah skor!
+                </p>
+                <button id="start-btn"
+                    class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition duration-300 transform hover:scale-105">
+                    Mulai Kuis
+                </button>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quiz-screen" class="hidden">
+
+                <!-- Score + Progress -->
+                <div class="flex justify-between mb-6 text-lg">
+                    <p>Skor: <span id="score" class="font-extrabold text-green-400">0</span></p>
+                    <p>Pertanyaan: <span id="progress" class="font-extrabold text-green-400">1/5</span></p>
+                </div>
+
+                <!-- Question Box -->
+                <h3 id="question-text" class="text-xl md:text-3xl font-semibold mb-8 text-white leading-relaxed">Pertanyaan akan muncul di sini...</h3>
+
+                <!-- Answer Buttons -->
+                <div id="answers" class="grid gap-4"></div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="hidden fade-in text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-green-300">🎉 Kuis Selesai!</h2>
+                <p class="text-lg text-gray-200 mb-4">Skor Akhir Kamu:</p>
+                <p id="final-score" class="text-6xl font-extrabold text-green-400 mb-8">0</p>
+
+                <button id="restart-btn"
+                    class="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-xl transition duration-300">
+                    Main Lagi
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-20 bg-black/50 py-8 text-center text-gray-400">
+        <p class="text-lg font-semibold text-white">🌿 <span class="text-green-400">Agri</span>Lens</p>
+        <p class="text-sm mt-2 opacity-80">&copy; 2025 AgriLens – All Rights Reserved.</p>
+    </footer>
+
+
+    <!-- GAME SCRIPT -->
+    <script>
+
+        const questions = [
+            {
+                q: "Apa itu pupuk kompos?",
+                a: ["Pupuk dari bahan kimia", "Pupuk dari hasil pembusukan bahan organik", "Alat penyiram tanaman", "Sistem irigasi"],
+                correct: 1
+            },
+            {
+                q: "Hidroponik adalah metode menanam dengan...",
+                a: ["Tanpa tanah", "Di bawah laut", "Di hutan lebat", "Hanya memakai pupuk kimia"],
+                correct: 0
+            },
+            {
+                q: "Suhu optimal untuk budidaya tanaman cabai adalah...",
+                a: ["0–5°C", "10–15°C", "20–30°C", "50°C ke atas"],
+                correct: 2
+            },
+            {
+                q: "Manakah berikut ini yang merupakan hama tanaman?",
+                a: ["Kumbang", "NPK", "Rangkaian IoT", "Traktor"],
+                correct: 0
+            },
+            {
+                q: "Fungsi MOL dalam pertanian adalah...",
+                a: ["Penyerap air", "Bahan bakar mesin", "Sumber mikroorganisme", "Pembasmi logam"],
+                correct: 2
+            }
+        ];
+
+        let index = 0;
+        let score = 0;
+
+        const startScreen = document.getElementById("start-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const resultScreen = document.getElementById("result-screen");
+
+        const scoreText = document.getElementById("score");
+        const progressText = document.getElementById("progress");
+        const questionText = document.getElementById("question-text");
+        const answersBox = document.getElementById("answers");
+        const finalScore = document.getElementById("final-score");
+
+        document.getElementById("start-btn").onclick = () => {
+            startScreen.classList.add("hidden");
+            quizScreen.classList.remove("hidden");
+            loadQuestion();
+        };
+
+        function loadQuestion() {
+            const question = questions[index];
+            questionText.textContent = question.q;
+            answersBox.innerHTML = "";
+
+            progressText.textContent = `${index + 1}/${questions.length}`;
+
+            question.a.forEach((ans, i) => {
+                const btn = document.createElement("button");
+                btn.textContent = ans;
+                btn.id = `answer-btn-${i}`; // Add ID for targeting
+                btn.className =
+                    "w-full bg-gray-700 hover:bg-green-600 text-white py-3 rounded-xl transition duration-300 transform hover:scale-105"; // Added hover effect
+                btn.onclick = () => checkAnswer(i);
+                answersBox.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(choice) {
+            const correctAnswerIndex = questions[index].correct;
+            const selectedButton = document.getElementById(`answer-btn-${choice}`);
+            const correctButton = document.getElementById(`answer-btn-${correctAnswerIndex}`);
+
+            // Disable all buttons to prevent further clicks
+            Array.from(answersBox.children).forEach(button => {
+                button.disabled = true;
+                button.classList.remove("hover:bg-green-600", "hover:scale-105"); // Remove hover effects
+                button.classList.add("cursor-not-allowed");
+            });
+
+            if (choice === correctAnswerIndex) {
+                score++;
+                scoreText.textContent = score;
+                selectedButton.classList.add("bg-green-700", "scale-105"); // Highlight correct choice
+            } else {
+                selectedButton.classList.add("bg-red-700", "scale-105"); // Highlight incorrect choice
+                correctButton.classList.add("bg-green-700", "scale-105"); // Show the correct answer
+            }
+
+            index++;
+
+            setTimeout(() => {
+                if (index < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500); // 1.5 second delay before next question
+
+        function showResult() {
+            quizScreen.classList.add("hidden");
+            resultScreen.classList.remove("hidden");
+            finalScore.textContent = score;
+        }
+
+        document.getElementById("restart-btn").onclick = () => {
+            index = 0;
+            score = 0;
+            scoreText.textContent = 0;
+            resultScreen.classList.add("hidden");
+            quizScreen.classList.remove("hidden");
+            loadQuestion();
+        };
+
+    </script>
+
+</body>
+
+</html>
