@@ -1,23 +1,21 @@
 <h1>Fitur User Masyarakat</h1>
 
-- Modul Edukasi Interaktif
-    1. Panduan menanam (buah/sayur) dalam bentuk step-by-step.
+- home page - index.html
+    1. menampilkan informasi deskripsi dari project AgriLens - serta dokumentasinya
+
+- Modul Edukasi page - module.html 
+    1. Panduan menanam (buah/sayur) dalam bentuk step-by-step disertakan videonya.
     2. Tutorial membuat pupuk organik/kompos.
-    3. Simulasi interaktif (misalnya: memilih jenis tanah → muncul rekomendasi tanaman).
 
-- Perpustakaan Digital (Artikel & Video)
-    1. Video pendek “how to”.
-    2. Artikel singkat tentang lingkungan dan pertanian berkelanjutan.
-    3. Fitur bookmark materi.
+- news page - news.html
+    1. menampilkan informasi berita seputar dunia pertanian dan informasi umum
 
-- Kuis & Tantangan Hijau (Gamifikasi)
-    1. Kuis edukasi pertanian.
-    2. Tantangan mingguan (misalnya “tanam bibit dalam 7 hari”).
-    3. Sistem poin & badge untuk meningkatkan engagement.
+- Kuis page - quiz.html
+    1. Kuis edukasi pertanian (soal abcd).
+    2. kuis edukasi pertanian (pencocokan garis kolom)
 
-- Forum Diskusi Warga
+- Forum page - forum.html
     1. Masyarakat bisa tanya-jawab dengan petani atau warga lain.
-    2. Upvote, komentar, dan upload foto tanaman/bibit.
 
 =====================================
 =====================================
@@ -38,11 +36,6 @@
     1. Input jumlah panen, kualitas, tanggal panen.
     2. Statistik perkembangan produktivitas lahan.
     3. Grafik panen bulanan/tahunan.
-
-- Forum Petani
-    1. Diskusi khusus antar petani.
-    2. Tips budidaya dan solusi masalah hama.
-    3. Ruang tanya-jawab dengan expert (opsional).
 
 =====================================
 =====================================
