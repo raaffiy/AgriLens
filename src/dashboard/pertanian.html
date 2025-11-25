@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitoring Pertanian - AgriLens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 font-sans leading-normal">
+
+    <div class="flex min-h-screen">
+
+        <aside class="w-64 bg-gray-800 border-r border-gray-700 p-6 fixed h-full overflow-y-auto shadow-xl">
+            <h1 class="text-3xl font-extrabold text-green-400 mb-10 tracking-wide">AgriLens</h1>
+            <nav class="space-y-3">
+                <a href="dashboard.html" class="block py-2 px-4 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-green-300 transition-all duration-200">Dashboard</a>
+                <a href="pertanian.html" class="block py-2 px-4 rounded-xl bg-green-700 text-white font-semibold transition-all duration-200 shadow-md">Monitoring Pendataan</a>
+                <a href="manajemen.html" class="block py-2 px-4 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-green-300 transition-all duration-200">Manajemen Konten</a>
+                <hr class="border-gray-600 my-5" />
+                <a href="../../index.html" class="block py-2 px-4 rounded-xl text-red-400 hover:bg-red-700 hover:text-white transition-all duration-200">Logout</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 ml-64 p-10">
+
+            <!-- HEADER -->
+            <header class="flex justify-between items-center bg-gray-800 p-6 rounded-xl shadow-lg mb-8">
+                <h2 class="text-3xl font-bold text-green-400">Monitoring Pertanian</h2>
+                <div class="flex items-center gap-4">
+                    <p class="text-lg text-gray-300">Selamat datang, Admin!</p>
+                    <img src="https://i.pravatar.cc/50"
+                        class="w-10 h-10 rounded-full border-2 border-green-400 shadow-md" />
+                </div>
+            </header>
+
+            <!-- GRID STATISTICS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Card Petani Aktif -->
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg 
+                            hover:shadow-green-500/20 hover:scale-105 transition-all duration-300">
+                    <h3 class="text-xl font-semibold text-gray-200 mb-2">Total Petani Aktif</h3>
+                    <p class="text-5xl font-extrabold text-green-400">10</p>
+                    <p class="text-sm text-gray-400 mt-2">Terdata dalam 30 hari terakhir</p>
+                </div>
+
+                <!-- Card Aktivitas Tanam -->
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg
+                            hover:shadow-green-500/20 hover:scale-105 transition-all duration-300">
+                    <h3 class="text-xl font-semibold text-gray-200 mb-2">Komoditas Tanaman Bulan Ini</h3>
+                    <p class="text-5xl font-extrabold text-blue-400">3</p>
+                    <p class="text-sm text-gray-400 mt-2">Meliputi pengolahan tanah & tanam baru</p>
+                </div>
+
+                <!-- Card Hasil Panen -->
+                <div class="bg-gray-800 border border-gray-700 p-6 rounded-2xl shadow-lg
+                            hover:shadow-green-500/20 hover:scale-105 transition-all duration-300">
+                    <h3 class="text-xl font-semibold text-gray-200 mb-2">Total Hasil Panen</h3>
+                    <p class="text-5xl font-extrabold text-yellow-400">3,420 Kg</p>
+                    <p class="text-sm text-gray-400 mt-2">Data akumulasi bulan berjalan</p>
+                </div>
+
+            </div>
+
+            <!-- TABEL AKTIVITAS -->
+            <section class="mt-10 bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-lg">
+
+                <div class="flex justify-between mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-200">Daftar Aktivitas Tanam</h3>
+                    <button class="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded-lg shadow-md">
+                        + Tambah Aktivitas
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-300 border-b border-gray-600 text-sm uppercase tracking-wider">
+                                <th class="py-3 px-4">Nama Petani</th>
+                                <th class="py-3 px-4">Komoditas</th>
+                                <th class="py-3 px-4">Tanggal Tanam</th>
+                                <th class="py-3 px-4">Status</th>
+                                <th class="py-3 px-4">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700 hover:bg-gray-700">
+                                <td class="py-3 px-4">Pak Budi</td>
+                                <td class="py-3 px-4">Padi</td>
+                                <td class="py-3 px-4">20 Nov 2025</td>
+                                <td class="py-3 px-4">
+                                    <span
+                                        class="bg-blue-500/20 text-blue-400 text-xs font-semibold px-2 py-1 rounded-full">
+                                        Dalam Proses
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 hover:underline">Detail</button>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-gray-700 hover:bg-gray-700">
+                                <td class="py-3 px-4">Bu Sari</td>
+                                <td class="py-3 px-4">Cabai</td>
+                                <td class="py-3 px-4">15 Nov 2025</td>
+                                <td class="py-3 px-4">
+                                    <span
+                                        class="bg-green-500/20 text-green-400 text-xs font-semibold px-2 py-1 rounded-full">
+                                        Selesai
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 hover:underline">Detail</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- DATA HASIL PANEN -->
+            <section class="mt-10 bg-gray-800 border border-gray-700 p-8 rounded-2xl shadow-lg mb-10">
+
+                <div class="flex justify-between mb-6">
+                    <h3 class="text-2xl font-semibold text-gray-200">Data Hasil Panen</h3>
+                    <button class="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded-lg shadow-md">
+                        + Tambah Data Panen
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-300 border-b border-gray-600 text-sm uppercase tracking-wider">
+                                <th class="py-3 px-4">Nama Petani</th>
+                                <th class="py-3 px-4">Komoditas</th>
+                                <th class="py-3 px-4">Jumlah Panen</th>
+                                <th class="py-3 px-4">Tanggal</th>
+                                <th class="py-3 px-4">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700 hover:bg-gray-700">
+                                <td class="py-3 px-4">Pak Budi</td>
+                                <td class="py-3 px-4">Padi</td>
+                                <td class="py-3 px-4">800 Kg</td>
+                                <td class="py-3 px-4">22 Nov 2025</td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 hover:underline">Detail</button>
+                                </td>
+                            </tr>
+
+                            <tr class="border-b border-gray-700 hover:bg-gray-700">
+                                <td class="py-3 px-4">Bu Sari</td>
+                                <td class="py-3 px-4">Cabai</td>
+                                <td class="py-3 px-4">250 Kg</td>
+                                <td class="py-3 px-4">18 Nov 2025</td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-400 hover:text-blue-300 hover:underline">Detail</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
