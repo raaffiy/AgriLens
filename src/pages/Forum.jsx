@@ -17,7 +17,7 @@ const Forum = () => {
   // ----------------------------------------------------------------
   const fetchDiscussions = () => {
     setLoading(true);
-    fetch('${API_BASE_URL}/api/discussions')
+    fetch(`${API_BASE_URL}/api/discussions`)
       .then(res => res.json())
       .then(data => {
         setDiscussions(Array.isArray(data) ? data : []);
@@ -52,7 +52,7 @@ const Forum = () => {
 
     setSubmitting(true);
     try {
-      const response = await fetch('${API_BASE_URL}/api/discussions', {
+      const response = await fetch(`${API_BASE_URL}/api/discussions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

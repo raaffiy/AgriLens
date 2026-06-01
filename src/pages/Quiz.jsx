@@ -79,7 +79,7 @@ const Quiz = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('${API_BASE_URL}/api/generate-quiz');
+      const res = await fetch(`${API_BASE_URL}/api/generate-quiz`);
       if (!res.ok) throw new Error('Gagal mengambil data kuis');
       const data = await res.json();
       

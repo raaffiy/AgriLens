@@ -38,7 +38,7 @@ const LensAI = () => {
         reader.readAsDataURL(selectedFile);
       });
 
-      const response = await fetch('${API_BASE_URL}/api/analyze-image', {
+      const response = await fetch(`${API_BASE_URL}/api/analyze-image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64, mediaType: selectedFile.type }),

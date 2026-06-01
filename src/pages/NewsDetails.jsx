@@ -16,7 +16,7 @@ const NewsDetails = () => {
         const data = await res.json();
         setNews(data);
 
-        const allRes = await fetch('${API_BASE_URL}/api/news');
+        const allRes = await fetch(`${API_BASE_URL}/api/news`);
         const allNews = await allRes.json();
         const filtered = allNews.filter(n => n.id !== parseInt(id)).slice(0, 2);
         setRelatedNews(filtered);
