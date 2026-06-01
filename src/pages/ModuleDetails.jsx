@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import API_BASE_URL from '../api';
 
 const ModuleDetails = () => {
   const { id } = useParams();
@@ -11,11 +12,11 @@ const ModuleDetails = () => {
     const fetchDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/modules/${id}`);
+        const response = await fetch(`${API_BASE_URL}/api/modules/${id}`);
         const data = await response.json();
         setModule(data);
 
-        const relatedRes = await fetch(`http://localhost:5000/api/modules`);
+        const relatedRes = await fetch(`${API_BASE_URL}/api/modules`);
         const allModules = await relatedRes.json();
         const filtered = allModules.filter(m => m.id !== parseInt(id)).slice(0, 3);
         setRelatedModules(filtered);
@@ -66,7 +67,7 @@ const ModuleDetails = () => {
     return url;
   };
 
-  const imgSrc = module.image?.startsWith('http') ? module.image : `http://localhost:5000${module.image}`;
+  const imgSrc = module.image?.startsWith('http') ? module.image : `${API_BASE_URL}${module.image}`;
   const fallbackSrc = 'https://placehold.co/800x800/1e293b/4ade80?text=AgriLens';
 
   return (
@@ -208,7 +209,7 @@ const ModuleDetails = () => {
                   className="group relative rounded-3xl overflow-hidden shadow-lg border border-green-500/20 hover:border-green-500/60 transition duration-500"
                 >
                   <img
-                    src={rel.image?.startsWith('http') ? rel.image : `http://localhost:5000${rel.image}`}
+                    src={rel.image?.startsWith('http') ? rel.image : `${API_BASE_URL}${rel.image}`}
                     alt={rel.title}
                     className="w-full h-56 object-cover group-hover:scale-110 transition duration-500 opacity-80"
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/600x400/1e293b/4ade80?text=AgriLens'; }}

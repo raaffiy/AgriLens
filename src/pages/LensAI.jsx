@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import API_BASE_URL from '../api';
 
 const LensAI = () => {
   const [analyzing, setAnalyzing] = useState(false);
@@ -37,7 +38,7 @@ const LensAI = () => {
         reader.readAsDataURL(selectedFile);
       });
 
-      const response = await fetch('http://localhost:5000/api/analyze-image', {
+      const response = await fetch('${API_BASE_URL}/api/analyze-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64, mediaType: selectedFile.type }),

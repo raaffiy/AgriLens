@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import API_BASE_URL from '../api';
 
 const News = () => {
   const [newsData, setNewsData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/news')
+    fetch(`${API_BASE_URL}/api/news`)
       .then(res => res.json())
       .then(data => {
         // Mapping data dari struktur MySQL ke format yang dibutuhkan UI
@@ -18,7 +19,7 @@ const News = () => {
           date: new Date(item.post_date).toLocaleDateString('id-ID', {
             day: 'numeric', month: 'long', year: 'numeric'
           }),
-          img: item.image ? (item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`) : 'https://placehold.co/400x400/1e293b/4ade80?text=No+Image',
+          img: item.image ? (item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`) : 'https://placehold.co/400x400/1e293b/4ade80?text=No+Image',
           color: item.category === 'Harga Pasar' ? 'bg-green-600' :
           item.category === 'Cuaca & Iklim' ? 'bg-yellow-600' :
           item.category === 'Hama dan Penyakit' ? 'bg-red-600' :

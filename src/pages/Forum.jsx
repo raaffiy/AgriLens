@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API_BASE_URL from '../api';
 
 const Forum = () => {
   const [discussions, setDiscussions] = useState([]);
@@ -16,7 +17,7 @@ const Forum = () => {
   // ----------------------------------------------------------------
   const fetchDiscussions = () => {
     setLoading(true);
-    fetch('http://localhost:5000/api/discussions')
+    fetch('${API_BASE_URL}/api/discussions')
       .then(res => res.json())
       .then(data => {
         setDiscussions(Array.isArray(data) ? data : []);
@@ -51,7 +52,7 @@ const Forum = () => {
 
     setSubmitting(true);
     try {
-      const response = await fetch('http://localhost:5000/api/discussions', {
+      const response = await fetch('${API_BASE_URL}/api/discussions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

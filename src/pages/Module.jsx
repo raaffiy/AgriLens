@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import API_BASE_URL from '../api';
 
 const getYouTubeThumbnail = (url) => {
   try {
@@ -20,7 +21,7 @@ const Module = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/modules')
+    fetch(`${API_BASE_URL}/api/modules`)
       .then(res => res.json())
       .then(data => {
         setModules(data);
@@ -42,7 +43,7 @@ const Module = () => {
       ? getYouTubeThumbnail(module.image)
       : module.image?.startsWith('http')
         ? module.image
-        : `http://localhost:5000${module.image}`;
+        : `${API_BASE_URL}${module.image}`;
 
     return (
       <Link

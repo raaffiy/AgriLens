@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/admin/Sidebar';
+import API_BASE_URL from '../../api';
 
 const Profile = () => {
   const [user, setUser]       = useState(null);
@@ -35,7 +36,7 @@ const Profile = () => {
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/update-profile', {
+      const response = await fetch('${API_BASE_URL}/api/update-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: user.email, nama: profileData.nama }),
@@ -72,7 +73,7 @@ const Profile = () => {
 
     setPasswordLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/update-password', {
+      const response = await fetch('${API_BASE_URL}/api/update-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

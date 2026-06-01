@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import API_BASE_URL from '../api';
 
 const NewsDetails = () => {
   const { id } = useParams();
@@ -11,11 +12,11 @@ const NewsDetails = () => {
     const fetchNews = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/news/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/news/${id}`);
         const data = await res.json();
         setNews(data);
 
-        const allRes = await fetch('http://localhost:5000/api/news');
+        const allRes = await fetch('${API_BASE_URL}/api/news');
         const allNews = await allRes.json();
         const filtered = allNews.filter(n => n.id !== parseInt(id)).slice(0, 2);
         setRelatedNews(filtered);
@@ -44,7 +45,7 @@ const NewsDetails = () => {
 
   const imgSrc = (image) =>
     image
-      ? image.startsWith('http') ? image : `http://localhost:5000${image}`
+      ? image.startsWith('http') ? image : `${API_BASE_URL}${image}`
       : 'https://placehold.co/400x400/1e293b/4ade80?text=No+Image';
 
   if (loading) return (

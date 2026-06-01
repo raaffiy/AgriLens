@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import API_BASE_URL from '../api';
 
 const TIMER_DURATION = 15;
 const LABELS = ['A', 'B', 'C', 'D'];
@@ -78,7 +79,7 @@ const Quiz = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('http://localhost:5000/api/generate-quiz');
+      const res = await fetch('${API_BASE_URL}/api/generate-quiz');
       if (!res.ok) throw new Error('Gagal mengambil data kuis');
       const data = await res.json();
       

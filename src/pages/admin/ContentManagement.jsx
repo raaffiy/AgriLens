@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/admin/Sidebar';
+import API_BASE_URL from '../../api';
 
 const ContentManagement = () => {
   const [activeTab, setActiveTab] = useState('modules');
@@ -33,7 +34,7 @@ const ContentManagement = () => {
       const endpoints = ['modules', 'news', 'discussions'];
       const responses = await Promise.all(
         endpoints.map(ep => 
-          fetch(`http://localhost:5000/api/${ep}`)
+          fetch(`${API_BASE_URL}/api/${ep}`)
             .then(async res => {
               const data = await res.json();
               return Array.isArray(data) ? data : [];
@@ -57,7 +58,7 @@ const ContentManagement = () => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
     
     try {
-      const response = await fetch(`http://localhost:5000/api/${activeTab}/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/${activeTab}/${id}`, {
         method: 'DELETE'
       });
       const result = await response.json();
@@ -97,8 +98,8 @@ const ContentManagement = () => {
     console.log("Submitting form...", { activeTab, modalMode, formData, userId: user?.id });
     
     const url = modalMode === 'add' 
-      ? `http://localhost:5000/api/${activeTab}` 
-      : `http://localhost:5000/api/${activeTab}/${selectedItem.id}`;
+      ? `${API_BASE_URL}/api/${activeTab}` 
+      : `${API_BASE_URL}/api/${activeTab}/${selectedItem.id}`;
     
     const method = modalMode === 'add' ? 'POST' : 'PUT';
 
@@ -296,7 +297,7 @@ const ContentManagement = () => {
                             <div className="w-16 h-16 rounded-xl bg-slate-800 border border-white/10 overflow-hidden flex-shrink-0">
                                {item.image ? (
                                  <img 
-                                   src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`} 
+                                   src={item.image.startsWith('http') ? item.image : `${API_BASE_URL}${item.image}`} 
                                    alt="Thumbnail" 
                                    className="w-full h-full object-cover"
                                    onError={(e) => {
