@@ -34,7 +34,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server backend berjalan di http://localhost:${PORT}`);
-    console.log(`Mode: MVC (Model-View-Controller)`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server backend berjalan di http://localhost:${PORT}`);
+        console.log(`Mode: MVC (Model-View-Controller)`);
+    });
+}
+
+module.exports = app;
