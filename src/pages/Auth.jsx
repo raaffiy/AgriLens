@@ -126,13 +126,13 @@ const Auth = () => {
                   <span onClick={() => setPage('forgot')}
                     className="text-green-300 hover:text-green-200 cursor-pointer font-semibold">Lupa password?</span>
                 </p> */}
-                <p className="text-gray-300">
+                {/* <p className="text-gray-300">
                   Belum punya akun? <span onClick={() => {
                     setPage('register');
                     setError('');
                   }}
                     className="text-green-300 hover:text-green-200 cursor-pointer font-semibold">Daftar sekarang</span>
-                </p>
+                </p> */}
               </div>
             </form>
           </section>
