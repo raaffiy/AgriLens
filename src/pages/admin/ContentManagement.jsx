@@ -7,6 +7,8 @@ const ContentManagement = () => {
   const [activeTab, setActiveTab] = useState('modules');
   const [allData, setAllData] = useState({ modules: [], news: [], discussions: [] });
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
@@ -57,6 +59,7 @@ const ContentManagement = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
     
+    setDeletingId(id);
     try {
       const response = await fetch(`${API_BASE_URL}/api/${activeTab}/${id}`, {
         method: 'DELETE'
@@ -68,6 +71,8 @@ const ContentManagement = () => {
       }
     } catch (err) {
       console.error("Error deleting data:", err);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -95,6 +100,7 @@ const ContentManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     console.log("Submitting form...", { activeTab, modalMode, formData, userId: user?.id });
     
     const url = modalMode === 'add' 
@@ -158,6 +164,8 @@ const ContentManagement = () => {
     } catch (err) {
       console.error("Error saving data:", err);
       alert("Terjadi kesalahan koneksi ke server");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -341,13 +349,20 @@ const ContentManagement = () => {
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button 
                             onClick={() => handleOpenEdit(item)}
-                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-bold transition-all border border-white/10">
+                            disabled={deletingId === item.id || isSubmitting}
+                            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-sm font-bold transition-all border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span>✏️</span> {activeTab === 'discussions' ? 'Reply' : 'Edit'}
                           </button>
                           <button 
                             onClick={() => handleDelete(item.id)}
-                            className="flex items-center gap-2 px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-sm font-bold transition-all border border-rose-500/20">
-                            <span>🗑️</span> Delete
+                            disabled={deletingId === item.id || isSubmitting}
+                            className={`flex items-center gap-2 px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl text-sm font-bold transition-all border border-rose-500/20 disabled:opacity-50 disabled:cursor-not-allowed`}>
+                            {deletingId === item.id ? (
+                              <div className="w-4 h-4 border-2 border-rose-400/20 border-t-rose-400 rounded-full animate-spin"></div>
+                            ) : (
+                              <span>🗑️</span>
+                            )}
+                            {deletingId === item.id ? 'Deleting...' : 'Delete'}
                           </button>
                         </div>
                       </td>
@@ -673,10 +688,24 @@ const ContentManagement = () => {
               )}
 
               <div className="pt-6 border-t border-white/5 flex gap-4">
-                <button type="submit" className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-900 py-4 rounded-2xl font-black transition-all shadow-xl shadow-emerald-500/20 active:scale-95">
-                  {modalMode === 'add' ? 'Confirm Addition' : 'Save Changes'}
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting || deletingId !== null}
+                  className={`flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-900 py-4 rounded-2xl font-black transition-all shadow-xl shadow-emerald-500/20 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed`}>
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-slate-900/20 border-t-slate-900 rounded-full animate-spin"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    modalMode === 'add' ? 'Confirm Addition' : 'Save Changes'
+                  )}
                 </button>
-                <button type="button" onClick={() => setShowModal(false)} className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black border border-white/10 transition-all">
+                <button 
+                  type="button" 
+                  onClick={() => setShowModal(false)} 
+                  disabled={isSubmitting}
+                  className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black border border-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                   Cancel
                 </button>
               </div>
