@@ -1,61 +1,26 @@
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
 
-// Bucket Name di Supabase Storage
-const BUCKET_NAME = 'agrilens';
-
-const uploadToSupabase = async (file, folder) => {
-    try {
-        if (!file || !file.buffer) return null;
-        
-        const fileName = `${folder}/${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`;
-        
-        const { data, error } = await db.storage
-            .from(BUCKET_NAME)
-            .upload(fileName, file.buffer, {
-                contentType: file.mimetype,
-                upsert: true
-            });
-
-        if (error) throw error;
-
-        // Dapatkan URL Publik
-        const { data: publicData } = db.storage
-            .from(BUCKET_NAME)
-            .getPublicUrl(fileName);
-
-        return publicData.publicUrl;
-    } catch (err) {
-        console.error('Supabase Upload Error:', err.message);
-        throw err;
-    }
-};
-
-const deleteFromSupabase = async (fileUrl) => {
-    if (!fileUrl || !fileUrl.includes('supabase.co')) return;
-    try {
-        const urlParts = fileUrl.split(`${BUCKET_NAME}/`);
-        if (urlParts.length < 2) return;
-        
-        const filePath = urlParts[1];
-        const { error } = await db.storage
-            .from(BUCKET_NAME)
-            .remove([filePath]);
-
-        if (error) throw error;
-    } catch (err) {
-        console.error('Supabase Delete Error:', err.message);
+const deleteLocalFile = (filePath) => {
+    if (!filePath || filePath.startsWith('http')) return;
+    
+    const relativePath = filePath.replace('/admin/uploads/', 'uploads/');
+    const fullPath = path.join(__dirname, '..', relativePath);
+    
+    if (fs.existsSync(fullPath)) {
+        try {
+            fs.unlinkSync(fullPath);
+        } catch (err) {
+            console.error('Gagal menghapus file lokal:', err.message);
+        }
     }
 };
 
 exports.getAllModules = async (req, res) => {
     try {
-        const { data, error } = await db
-            .from('modules')
-            .select('*')
-            .order('id', { ascending: true });
-
-        if (error) return res.status(500).json({ error: error.message });
-        res.json(data || []);
+        const [rows] = await db.execute('SELECT * FROM modules ORDER BY id ASC');
+        res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -65,14 +30,11 @@ exports.getModulesByCategory = async (req, res) => {
     try {
         const { category } = req.params;
         const decodedCategory = decodeURIComponent(category);
-        const { data, error } = await db
-            .from('modules')
-            .select('*')
-            .eq('category', decodedCategory)
-            .order('id', { ascending: true });
-
-        if (error) return res.status(500).json({ error: error.message });
-        res.json(data || []);
+        const [rows] = await db.execute(
+            'SELECT * FROM modules WHERE category = ? ORDER BY id ASC',
+            [decodedCategory]
+        );
+        res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -81,17 +43,12 @@ exports.getModulesByCategory = async (req, res) => {
 exports.getModuleById = async (req, res) => {
     try {
         const { id } = req.params;
-        const { data, error } = await db
-            .from('modules')
-            .select('*')
-            .eq('id', id)
-            .single();
+        const [rows] = await db.execute('SELECT * FROM modules WHERE id = ?', [id]);
 
-        if (error) {
-            if (error.code === 'PGRST116') return res.status(404).json({ error: "Modul tidak ditemukan" });
-            return res.status(500).json({ error: error.message });
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Modul tidak ditemukan" });
         }
-        res.json(data);
+        res.json(rows[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -101,6 +58,9 @@ exports.createModule = async (req, res) => {
     try {
         const { title, category, short_desc = '', long_desc = '', benefits = '', planting_steps = '', care_tips = '' } = req.body;
         let userId = req.body.userId;
+        if (Array.isArray(userId)) {
+            userId = userId[0];
+        }
         
         if (!userId || userId === 'undefined' || userId === 'null') {
             userId = null;
@@ -110,28 +70,23 @@ exports.createModule = async (req, res) => {
 
         let imagePath = req.body.image || null;
         if (req.file) {
-            imagePath = await uploadToSupabase(req.file, 'modules');
+            imagePath = `/admin/uploads/modules/${req.file.filename}`;
+        } else if (typeof imagePath === 'string' && imagePath.startsWith('[object')) {
+            imagePath = null;
         }
 
-        const { data, error } = await db
-            .from('modules')
-            .insert([{ 
-                userid: userId, 
-                image: imagePath, 
-                title, 
-                category, 
-                short_desc, 
-                long_desc, 
-                benefits, 
-                planting_steps, 
-                care_tips 
-            }])
-            .select('id')
-            .single();
+        const [result] = await db.execute(
+            'INSERT INTO modules (userId, image, title, category, short_desc, long_desc, benefits, planting_steps, care_tips) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [userId, imagePath, title, category, short_desc, long_desc, benefits, planting_steps, care_tips]
+        );
 
-        if (error) return res.status(500).json({ error: error.message });
-        res.json({ success: true, message: "Modul berhasil ditambahkan", id: data.id });
+        res.json({ 
+            success: true, 
+            message: "Modul berhasil ditambahkan", 
+            id: result.insertId 
+        });
     } catch (err) {
+        console.error("Error creating module:", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -141,53 +96,42 @@ exports.updateModule = async (req, res) => {
         const { id } = req.params;
         const { title, category, short_desc = '', long_desc = '', benefits = '', planting_steps = '', care_tips = '' } = req.body;
         let userId = req.body.userId;
+        if (Array.isArray(userId)) {
+            userId = userId[0];
+        }
         
         if (!userId || userId === 'undefined' || userId === 'null') {
             userId = null;
         }
 
-        const { data: existing, error: fetchError } = await db
-            .from('modules')
-            .select('image, userid')
-            .eq('id', id)
-            .single();
+        const [existing] = await db.execute('SELECT image, userId FROM modules WHERE id = ?', [id]);
 
-        if (fetchError) {
-            if (fetchError.code === 'PGRST116') return res.status(404).json({ error: "Modul tidak ditemukan" });
-            return res.status(500).json({ error: fetchError.message });
+        if (existing.length === 0) {
+            return res.status(404).json({ error: "Modul tidak ditemukan" });
         }
 
-        const oldImage = existing.image;
-        const currentUserId = existing.userid;
-        let imagePath = req.body.image || oldImage;
+        const oldImage = existing[0].image;
+        const currentUserId = existing[0].userId;
+        let imagePath = oldImage;
 
         if (req.file) {
-            imagePath = await uploadToSupabase(req.file, 'modules');
-            if (oldImage) await deleteFromSupabase(oldImage);
-        } else if (req.body.image && req.body.image !== oldImage) {
-            if (oldImage) await deleteFromSupabase(oldImage);
+            imagePath = `/admin/uploads/modules/${req.file.filename}`;
+            if (oldImage) deleteLocalFile(oldImage);
+        } else if (typeof req.body.image === 'string' && req.body.image !== oldImage && !req.body.image.startsWith('[object')) {
+            imagePath = req.body.image;
+            if (oldImage) deleteLocalFile(oldImage);
         }
 
         const finalUserId = userId || currentUserId;
 
-        const { error: updateError } = await db
-            .from('modules')
-            .update({ 
-                userid: finalUserId, 
-                image: imagePath, 
-                title, 
-                category, 
-                short_desc, 
-                long_desc, 
-                benefits, 
-                planting_steps, 
-                care_tips 
-            })
-            .eq('id', id);
+        await db.execute(
+            'UPDATE modules SET userId = ?, image = ?, title = ?, category = ?, short_desc = ?, long_desc = ?, benefits = ?, planting_steps = ?, care_tips = ? WHERE id = ?',
+            [finalUserId, imagePath, title, category, short_desc, long_desc, benefits, planting_steps, care_tips, id]
+        );
 
-        if (updateError) return res.status(500).json({ error: updateError.message });
         res.json({ success: true, message: "Modul berhasil diperbarui" });
     } catch (err) {
+        console.error("Error updating module:", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -195,26 +139,16 @@ exports.updateModule = async (req, res) => {
 exports.deleteModule = async (req, res) => {
     try {
         const { id } = req.params;
-        const { data: existing, error: fetchError } = await db
-            .from('modules')
-            .select('image')
-            .eq('id', id)
-            .single();
+        const [existing] = await db.execute('SELECT image FROM modules WHERE id = ?', [id]);
 
-        if (fetchError) {
-            if (fetchError.code === 'PGRST116') return res.status(404).json({ error: "Modul tidak ditemukan" });
-            return res.status(500).json({ error: fetchError.message });
+        if (existing.length === 0) {
+            return res.status(404).json({ error: "Modul tidak ditemukan" });
         }
 
-        const oldImage = existing.image;
-        const { error: deleteError } = await db
-            .from('modules')
-            .delete()
-            .eq('id', id);
+        const oldImage = existing[0].image;
+        await db.execute('DELETE FROM modules WHERE id = ?', [id]);
 
-        if (deleteError) return res.status(500).json({ error: deleteError.message });
-        
-        if (oldImage) await deleteFromSupabase(oldImage);
+        if (oldImage) deleteLocalFile(oldImage);
         res.json({ success: true, message: "Modul berhasil dihapus" });
     } catch (err) {
         res.status(500).json({ error: err.message });

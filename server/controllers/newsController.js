@@ -1,60 +1,30 @@
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
 
-// Bucket Name di Supabase Storage
-const BUCKET_NAME = 'agrilens';
-
-const uploadToSupabase = async (file, folder) => {
-    try {
-        if (!file || !file.buffer) return null;
-        
-        const fileName = `${folder}/${Date.now()}_${file.originalname.replace(/\s+/g, '_')}`;
-        
-        const { data, error } = await db.storage
-            .from(BUCKET_NAME)
-            .upload(fileName, file.buffer, {
-                contentType: file.mimetype,
-                upsert: true
-            });
-
-        if (error) throw error;
-
-        const { data: publicData } = db.storage
-            .from(BUCKET_NAME)
-            .getPublicUrl(fileName);
-
-        return publicData.publicUrl;
-    } catch (err) {
-        console.error('Supabase Upload Error:', err.message);
-        throw err;
-    }
-};
-
-const deleteFromSupabase = async (fileUrl) => {
-    if (!fileUrl || !fileUrl.includes('supabase.co')) return;
-    try {
-        const urlParts = fileUrl.split(`${BUCKET_NAME}/`);
-        if (urlParts.length < 2) return;
-        
-        const filePath = urlParts[1];
-        const { error } = await db.storage
-            .from(BUCKET_NAME)
-            .remove([filePath]);
-
-        if (error) throw error;
-    } catch (err) {
-        console.error('Supabase Delete Error:', err.message);
+const deleteLocalFile = (filePath) => {
+    if (!filePath || filePath.startsWith('http')) return;
+    
+    // Convert URL path to local file path
+    // Example: /admin/uploads/news/img.jpg -> uploads/news/img.jpg
+    const relativePath = filePath.replace('/admin/uploads/', 'uploads/');
+    const fullPath = path.join(__dirname, '..', relativePath);
+    
+    if (fs.existsSync(fullPath)) {
+        try {
+            fs.unlinkSync(fullPath);
+        } catch (err) {
+            console.error('Gagal menghapus file lokal:', err.message);
+        }
     }
 };
 
 exports.getAllNews = async (req, res) => {
     try {
-        const { data, error } = await db
-            .from('news')
-            .select('id, image, title, category, post_date, long_desc')
-            .order('post_date', { ascending: false });
-
-        if (error) return res.status(500).json({ error: error.message });
-        res.json(data || []);
+        const [rows] = await db.execute(
+            'SELECT id, image, title, category, post_date, long_desc FROM news ORDER BY post_date DESC'
+        );
+        res.json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -63,17 +33,12 @@ exports.getAllNews = async (req, res) => {
 exports.getNewsById = async (req, res) => {
     try {
         const { id } = req.params;
-        const { data, error } = await db
-            .from('news')
-            .select('*')
-            .eq('id', id)
-            .single();
+        const [rows] = await db.execute('SELECT * FROM news WHERE id = ?', [id]);
 
-        if (error) {
-            if (error.code === 'PGRST116') return res.status(404).json({ error: "Berita tidak ditemukan" });
-            return res.status(500).json({ error: error.message });
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Berita tidak ditemukan" });
         }
-        res.json(data);
+        res.json(rows[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -83,6 +48,9 @@ exports.createNews = async (req, res) => {
     try {
         const { title, category, post_date, long_desc } = req.body;
         let userId = req.body.userId;
+        if (Array.isArray(userId)) {
+            userId = userId[0];
+        }
 
         if (!userId || userId === 'undefined' || userId === 'null') {
             userId = null;
@@ -94,18 +62,22 @@ exports.createNews = async (req, res) => {
         
         let imagePath = null;
         if (req.file) {
-            imagePath = await uploadToSupabase(req.file, 'news');
+            // Path yang disimpan ke DB disesuaikan dengan static serve di server.js
+            imagePath = `/admin/uploads/news/${req.file.filename}`;
         }
         
-        const { data, error } = await db
-            .from('news')
-            .insert([{ userid: userId, image: imagePath, title, category, post_date, long_desc }])
-            .select('id')
-            .single();
+        const [result] = await db.execute(
+            'INSERT INTO news (userId, image, title, category, post_date, long_desc) VALUES (?, ?, ?, ?, ?, ?)',
+            [userId, imagePath, title, category, post_date, long_desc]
+        );
 
-        if (error) return res.status(500).json({ error: error.message });
-        res.json({ success: true, message: "Berita berhasil ditambahkan", id: data.id });
+        res.json({ 
+            success: true, 
+            message: "Berita berhasil ditambahkan", 
+            id: result.insertId 
+        });
     } catch (err) {
+        console.error("Error creating news:", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -115,41 +87,42 @@ exports.updateNews = async (req, res) => {
         const { id } = req.params;
         const { title, category, post_date, long_desc } = req.body;
         let userId = req.body.userId;
+        if (Array.isArray(userId)) {
+            userId = userId[0];
+        }
 
         if (!userId || userId === 'undefined' || userId === 'null') {
             userId = null;
         }
 
-        const { data: existing, error: fetchError } = await db
-            .from('news')
-            .select('image, userid')
-            .eq('id', id)
-            .single();
+        const [existing] = await db.execute('SELECT image, userId FROM news WHERE id = ?', [id]);
 
-        if (fetchError) {
-            if (fetchError.code === 'PGRST116') return res.status(404).json({ error: "Berita tidak ditemukan" });
-            return res.status(500).json({ error: fetchError.message });
+        if (existing.length === 0) {
+            return res.status(404).json({ error: "Berita tidak ditemukan" });
         }
 
-        const oldImage = existing.image;
-        const currentUserId = existing.userid;
+        const oldImage = existing[0].image;
+        const currentUserId = existing[0].userId;
         let imagePath = oldImage;
 
         if (req.file) {
-            imagePath = await uploadToSupabase(req.file, 'news');
-            if (oldImage) await deleteFromSupabase(oldImage);
+            imagePath = `/admin/uploads/news/${req.file.filename}`;
+            if (oldImage) deleteLocalFile(oldImage);
+        } else if (typeof req.body.image === 'string' && req.body.image !== oldImage && !req.body.image.startsWith('[object')) {
+            imagePath = req.body.image;
+            if (oldImage) deleteLocalFile(oldImage);
         }
 
         const finalUserId = userId || currentUserId;
 
-        const { error: updateError } = await db
-            .from('news')
-            .update({ userid: finalUserId, image: imagePath, title, category, post_date, long_desc })
-            .eq('id', id);
+        await db.execute(
+            'UPDATE news SET userId = ?, image = ?, title = ?, category = ?, post_date = ?, long_desc = ? WHERE id = ?',
+            [finalUserId, imagePath, title, category, post_date, long_desc, id]
+        );
 
-        if (updateError) return res.status(500).json({ error: updateError.message });
         res.json({ success: true, message: "Berita berhasil diperbarui" });
     } catch (err) {
+        console.error("Error updating news:", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -157,26 +130,16 @@ exports.updateNews = async (req, res) => {
 exports.deleteNews = async (req, res) => {
     try {
         const { id } = req.params;
-        const { data: existing, error: fetchError } = await db
-            .from('news')
-            .select('image')
-            .eq('id', id)
-            .single();
+        const [existing] = await db.execute('SELECT image FROM news WHERE id = ?', [id]);
 
-        if (fetchError) {
-            if (fetchError.code === 'PGRST116') return res.status(404).json({ error: "Berita tidak ditemukan" });
-            return res.status(500).json({ error: fetchError.message });
+        if (existing.length === 0) {
+            return res.status(404).json({ error: "Berita tidak ditemukan" });
         }
 
-        const oldImage = existing.image;
-        const { error: deleteError } = await db
-            .from('news')
-            .delete()
-            .eq('id', id);
+        const oldImage = existing[0].image;
+        await db.execute('DELETE FROM news WHERE id = ?', [id]);
 
-        if (deleteError) return res.status(500).json({ error: deleteError.message });
-        
-        if (oldImage) await deleteFromSupabase(oldImage);
+        if (oldImage) deleteLocalFile(oldImage);
         res.json({ success: true, message: "Berita berhasil dihapus" });
     } catch (err) {
         res.status(500).json({ error: err.message });
