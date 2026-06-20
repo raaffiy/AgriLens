@@ -6,8 +6,8 @@ const deleteLocalFile = (filePath) => {
     if (!filePath || filePath.startsWith('http')) return;
     
     // Convert URL path to local file path
-    // Example: /admin/uploads/news/img.jpg -> uploads/news/img.jpg
-    const relativePath = filePath.replace('/admin/uploads/', 'uploads/');
+    // Example: /server/uploads/news/img.jpg -> uploads/news/img.jpg
+    const relativePath = filePath.replace('/server/uploads/', 'uploads/');
     const fullPath = path.join(__dirname, '..', relativePath);
     
     if (fs.existsSync(fullPath)) {
@@ -63,7 +63,7 @@ exports.createNews = async (req, res) => {
         let imagePath = null;
         if (req.file) {
             // Path yang disimpan ke DB disesuaikan dengan static serve di server.js
-            imagePath = `/admin/uploads/news/${req.file.filename}`;
+            imagePath = `/server/uploads/news/${req.file.filename}`;
         }
         
         const [result] = await db.execute(
@@ -106,7 +106,7 @@ exports.updateNews = async (req, res) => {
         let imagePath = oldImage;
 
         if (req.file) {
-            imagePath = `/admin/uploads/news/${req.file.filename}`;
+            imagePath = `/server/uploads/news/${req.file.filename}`;
             if (oldImage) deleteLocalFile(oldImage);
         } else if (typeof req.body.image === 'string' && req.body.image !== oldImage && !req.body.image.startsWith('[object')) {
             imagePath = req.body.image;

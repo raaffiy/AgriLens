@@ -1,0 +1,6 @@
+# DO NOT REMOVE OR MODIFY. Developed by cPanel.
+PassengerEnabled on
+PassengerAppEnv production
+PassengerAppRoot /home/sistem18_agrilens/public/server
+PassengerBaseURI /server
+PassengerStartupFile server.js

@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Route API requests to the Express backend (located in /server folder)
+  # This rewrites /api/xxx internally to /server/api/xxx, which Passenger handles.
+  # The [PT] (pass through) flag is crucial for Passenger to intercept the rewritten path.
+  RewriteRule ^api/(.*)$ server/api/$1 [PT,L]
+
+  # 2. Serve physical files or directories directly if they exist
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 3. Fallback to index.html for client-side routing (React Router SPA)
+  RewriteRule ^ index.html [L]
+</IfModule>

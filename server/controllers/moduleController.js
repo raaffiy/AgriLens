@@ -5,7 +5,7 @@ const path = require('path');
 const deleteLocalFile = (filePath) => {
     if (!filePath || filePath.startsWith('http')) return;
     
-    const relativePath = filePath.replace('/admin/uploads/', 'uploads/');
+    const relativePath = filePath.replace('/server/uploads/', 'uploads/');
     const fullPath = path.join(__dirname, '..', relativePath);
     
     if (fs.existsSync(fullPath)) {
@@ -70,7 +70,7 @@ exports.createModule = async (req, res) => {
 
         let imagePath = req.body.image || null;
         if (req.file) {
-            imagePath = `/admin/uploads/modules/${req.file.filename}`;
+            imagePath = `/server/uploads/modules/${req.file.filename}`;
         } else if (typeof imagePath === 'string' && imagePath.startsWith('[object')) {
             imagePath = null;
         }
@@ -115,7 +115,7 @@ exports.updateModule = async (req, res) => {
         let imagePath = oldImage;
 
         if (req.file) {
-            imagePath = `/admin/uploads/modules/${req.file.filename}`;
+            imagePath = `/server/uploads/modules/${req.file.filename}`;
             if (oldImage) deleteLocalFile(oldImage);
         } else if (typeof req.body.image === 'string' && req.body.image !== oldImage && !req.body.image.startsWith('[object')) {
             imagePath = req.body.image;
